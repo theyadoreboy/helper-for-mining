@@ -1,8 +1,9 @@
-name: Keep Repo Alive
+name: 🟢 Keep Repository Alive
 
 on:
   schedule:
-    - cron: '0 0 */59 * *' # Setiap 59 hari (tepat tengah malam UTC)
+    - cron: '0 0 */30 * *'  # Jalankan setiap 30 hari pada pukul 00:00 UTC
+  workflow_dispatch:         # Bisa dijalankan manual dari GitHub UI
 
 jobs:
   keepalive:
@@ -12,9 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Make empty commit
+      - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit --allow-empty -m "🟢 Keepalive commit to prevent Actions from sleeping"
+
+      - name: Create empty keepalive commit
+        run: |
+          git commit --allow-empty -m "🟢 Keepalive: prevent Actions from sleeping"
           git push
