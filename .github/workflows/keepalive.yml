@@ -1,0 +1,20 @@
+name: Keep Repo Alive
+
+on:
+  schedule:
+    - cron: '0 0 */59 * *' # Setiap 59 hari (tepat tengah malam UTC)
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make empty commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "🟢 Keepalive commit to prevent Actions from sleeping"
+          git push
